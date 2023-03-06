@@ -44,7 +44,7 @@ def main():
         action = env.action_space.sample()
 
         # Processing:
-        obs, reward, done, info = env.step(action)
+        obs, reward, done, _, info = env.step(action)
 
         score += reward
         print(f"Obs: {obs}\n" f"Score: {score}\n")

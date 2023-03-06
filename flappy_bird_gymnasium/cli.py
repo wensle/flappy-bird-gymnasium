@@ -61,7 +61,7 @@ def random_agent_env():
         action = env.action_space.sample()
 
         # Processing:
-        obs, reward, done, _ = env.step(action)
+        obs, reward, done, _, _ = env.step(action)
 
         score += reward
         print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")

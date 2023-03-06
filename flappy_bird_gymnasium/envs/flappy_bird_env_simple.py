@@ -70,7 +70,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
             be drawn.
     """
 
-    metadata = {"render.modes": ["human"]}
+    metadata = {"render_modes": ["human"], "render_fps": 30}
 
     def __init__(
         self,
@@ -83,7 +83,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     ) -> None:
         self.action_space = gymnasium.spaces.Discrete(2)
         self.observation_space = gymnasium.spaces.Box(
-            -np.inf, np.inf, shape=(3,), dtype=np.float32
+            -np.inf, np.inf, shape=(3,), dtype=np.float64
         )
         self._screen_size = screen_size
         self._normalize_obs = normalize_obs
@@ -161,18 +161,20 @@ class FlappyBirdEnvSimple(gymnasium.Env):
 
         return obs, reward, done, False, info
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         """Resets the environment (starts a new game)."""
+        super().reset(seed=seed)
+
         self._game = FlappyBirdLogic(
             screen_size=self._screen_size, pipe_gap_size=self._pipe_gap
         )
         if self._renderer is not None:
             self._renderer.game = self._game
-        info = {"score": self._game.score}
 
+        info = {"score": self._game.score}
         return self._get_observation(), info
 
-    def render(self, mode="human") -> None:
+    def render(self) -> None:
         """Renders the next frame."""
         if self._renderer is None:
             self._renderer = FlappyBirdRenderer(
@@ -191,5 +193,6 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         """Closes the environment."""
         if self._renderer is not None:
             pygame.display.quit()
+            pygame.quit()
             self._renderer = None
         super().close()

@@ -40,7 +40,7 @@ def play_with_render(env):
     clock = pygame.time.Clock()
     score = 0
 
-    obs = env.reset()
+    obs, _ = env.reset()
     while True:
         env.render()
 
@@ -55,7 +55,7 @@ def play_with_render(env):
                 action = 1
 
         # Processing:
-        obs, reward, done, info = env.step(action)
+        obs, reward, done, _, info = env.step(action)
 
         score += reward
         print(f"Obs shape: {obs.shape}")
@@ -70,11 +70,11 @@ def play_with_render(env):
 
 
 def play_with_obs(env, greyscale: bool):
-    obs = env.reset()
+    obs, _ = env.reset()
 
     # noinspection PyProtectedMember
     display = pygame.display.set_mode(
-        (env._renderer._screen_width, env._renderer._screen_height)
+        (env.renderer._screen_width, env.renderer._screen_height)
     )
     clock = pygame.time.Clock()
     score = 0
@@ -99,7 +99,7 @@ def play_with_obs(env, greyscale: bool):
                 action = 1
 
         # Processing:
-        obs, reward, done, info = env.step(action)
+        obs, reward, done, _, info = env.step(action)
 
         score += reward
         print(f"Obs shape: {obs.shape}")
@@ -113,7 +113,7 @@ def play_with_obs(env, greyscale: bool):
 
 
 def visualize_obs(env, greyscale: bool):
-    obs = env.reset()
+    obs, _ = env.reset()
     obs = np.moveaxis(obs, source=1, destination=0)  # width <-> height
     if greyscale:
         obs = obs.mean(axis=-1)

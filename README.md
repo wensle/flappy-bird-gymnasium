@@ -53,14 +53,14 @@ import flappy_bird_gymnasium
 import gymnasium
 env = gymnasium.make("FlappyBird-v0")
 
-obs = env.reset()
+obs, _ = env.reset()
 while True:
     # Next action:
     # (feed the observation to your agent here)
     action = env.action_space.sample()
 
     # Processing:
-    obs, reward, done, info = env.step(action)
+    obs, reward, done, _, info = env.step(action)
     
     # Rendering the game:
     # (remove this two lines during training)

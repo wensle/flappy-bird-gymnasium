@@ -55,7 +55,7 @@ def play():
                 action = 1
 
         # Processing:
-        obs, reward, done, info = env.step(action)
+        obs, reward, done, _, info = env.step(action)
 
         score += reward
         print(f"Obs: {obs}")

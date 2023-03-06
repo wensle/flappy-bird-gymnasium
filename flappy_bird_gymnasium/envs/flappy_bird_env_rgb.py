@@ -57,7 +57,7 @@ class FlappyBirdEnvRGB(gymnasium.Env):
             be drawn.
     """
 
-    metadata = {"render.modes": ["human", "rgb_array"]}
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 30}
 
     def __init__(
         self,
@@ -65,6 +65,7 @@ class FlappyBirdEnvRGB(gymnasium.Env):
         pipe_gap: int = 100,
         bird_color: str = "yellow",
         pipe_color: str = "green",
+        render_mode=None,
         background: Optional[str] = None,
     ) -> None:
         self.action_space = gymnasium.spaces.Discrete(2)
@@ -72,9 +73,12 @@ class FlappyBirdEnvRGB(gymnasium.Env):
 
         self._screen_size = screen_size
         self._pipe_gap = pipe_gap
+        
+        assert render_mode is None or render_mode in self.metadata["render_modes"]
+        self.render_mode = render_mode
 
         self._game = None
-        self._renderer = FlappyBirdRenderer(
+        self.renderer = FlappyBirdRenderer(
             screen_size=self._screen_size,
             bird_color=bird_color,
             pipe_color=pipe_color,
@@ -82,17 +86,20 @@ class FlappyBirdEnvRGB(gymnasium.Env):
         )
 
     def _get_observation(self):
-        self._renderer.draw_surface(show_score=False)
-        return pygame.surfarray.array3d(self._renderer.surface)
+        self.renderer.draw_surface(show_score=False)
+        return pygame.surfarray.array3d(self.renderer.surface)
 
-    def reset(self):
+    def reset(self, seed=None, options=None):
         """Resets the environment (starts a new game)."""
+        super().reset(seed=seed)
+
         self._game = FlappyBirdLogic(
             screen_size=self._screen_size, pipe_gap_size=self._pipe_gap
         )
 
-        self._renderer.game = self._game
-        return self._get_observation()
+        self.renderer.game = self._game
+        info = {"score": self._game.score}
+        return self._get_observation(), info
 
     def step(
         self,
@@ -121,9 +128,9 @@ class FlappyBirdEnvRGB(gymnasium.Env):
         done = not alive
         info = {"score": self._game.score}
 
-        return obs, reward, done, info
+        return obs, reward, done, False, info
 
-    def render(self, mode="human") -> Optional[np.ndarray]:
+    def render(self) -> Optional[np.ndarray]:
         """Renders the environment.
 
         If ``mode`` is:
@@ -134,29 +141,24 @@ class FlappyBirdEnvRGB(gymnasium.Env):
               representing RGB values for an x-by-y pixel image, suitable
               for turning into a video.
 
-        Args:
-            mode (str): the mode to render with.
-
         Returns:
             `None` if ``mode`` is "human" and a numpy.ndarray with RGB values if
             it's "rgb_array"
         """
-        if mode not in FlappyBirdEnvRGB.metadata["render.modes"]:
-            raise ValueError("Invalid render mode!")
-
-        self._renderer.draw_surface(show_score=True)
-        if mode == "rgb_array":
-            return pygame.surfarray.array3d(self._renderer.surface)
+        self.renderer.draw_surface(show_score=True)
+        if self.render_mode == "rgb_array":
+            return pygame.surfarray.array3d(self.renderer.surface)
         else:
-            if self._renderer.display is None:
-                self._renderer.make_display()
+            if self.renderer.display is None:
+                self.renderer.make_display()
 
-            self._renderer.update_display()
+            self.renderer.update_display()
 
     def close(self):
         """Closes the environment."""
-        if self._renderer is not None:
+        if self.renderer is not None:
             pygame.display.quit()
-            self._renderer = None
+            pygame.quit()
+            self.renderer = None
 
         super().close()
