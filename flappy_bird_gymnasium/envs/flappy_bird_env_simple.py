@@ -83,7 +83,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     ) -> None:
         self.action_space = gymnasium.spaces.Discrete(2)
         self.observation_space = gymnasium.spaces.Box(
-            -np.inf, np.inf, shape=(3,), dtype=np.float64
+            -np.inf, np.inf, shape=(4,), dtype=np.float64
         )
         self._screen_size = screen_size
         self._normalize_obs = normalize_obs
@@ -128,8 +128,8 @@ class FlappyBirdEnvSimple(gymnasium.Env):
             [
                 h_dist,  # horizontal distance to the next pipe
                 v_dist,  # vertical distance to the next pipe
-                vel_y,   # player's vertical velocity
-                rot,     # player's rotation
+                vel_y,  # player's vertical velocity
+                rot,  # player's rotation
             ]
         )
 
