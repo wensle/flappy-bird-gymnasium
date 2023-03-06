@@ -199,7 +199,7 @@ class FlappyBirdLogic:
         Returns:
             `True` if the player is alive and `False` otherwise.
         """
-        reward = 0.1  # reward for staying alive
+        reward = 0.5  # reward for staying alive
         self.sound_cache = None
         if action == FlappyBirdLogic.Actions.FLAP:
             if self.player_y > -2 * PLAYER_HEIGHT:
@@ -210,7 +210,7 @@ class FlappyBirdLogic:
         self.last_action = action
         if self.check_crash():
             self.sound_cache = "hit"
-            reward = -1  # reward for dying
+            reward = -1000  # reward for dying
             return reward, False
 
         # check for score
@@ -219,7 +219,7 @@ class FlappyBirdLogic:
             pipe_mid_pos = pipe["x"] + PIPE_WIDTH / 2
             if pipe_mid_pos <= player_mid_pos < pipe_mid_pos + 4:
                 self.score += 1
-                reward = 1  # reward for pipe passed
+                reward = 5  # reward for pipe passed
                 self.sound_cache = "point"
 
         # player_index base_x change
