@@ -114,17 +114,14 @@ class FlappyBirdEnvRGB(gymnasium.Env):
         Returns:
             A tuple containing, respectively:
 
-                * an observation (RGB-array representing the game's screen);
-                * a reward (always 1);
+                * an observation (RGB-array representing the game's screen)
+                * a reward (alive = +0.1, pipe = +1.0, dead = -1.0)
                 * a status report (`True` if the game is over and `False`
-                  otherwise);
-                * an info dictionary.
+                  otherwise)
+                * an info dictionary
         """
-        alive = self._game.update_state(action)
+        reward, alive = self._game.update_state(action)
         obs = self._get_observation()
-
-        reward = 1
-
         done = not alive
         info = {"score": self._game.score}
 
