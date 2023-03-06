@@ -31,11 +31,14 @@ import gymnasium
 import numpy as np
 import pygame
 
-from flappy_bird_gymnasium.envs.game_logic import (PIPE_HEIGHT, PIPE_WIDTH,
-                                                   PLAYER_HEIGHT,
-                                                   PLAYER_MAX_VEL_Y,
-                                                   PLAYER_WIDTH,
-                                                   FlappyBirdLogic)
+from flappy_bird_gymnasium.envs.game_logic import (
+    PIPE_HEIGHT,
+    PIPE_WIDTH,
+    PLAYER_HEIGHT,
+    PLAYER_MAX_VEL_Y,
+    PLAYER_WIDTH,
+    FlappyBirdLogic,
+)
 from flappy_bird_gymnasium.envs.renderer import FlappyBirdRenderer
 
 

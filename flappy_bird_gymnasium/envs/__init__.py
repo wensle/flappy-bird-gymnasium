@@ -25,5 +25,4 @@
 """
 
 from flappy_bird_gymnasium.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
-from flappy_bird_gymnasium.envs.flappy_bird_env_simple import \
-    FlappyBirdEnvSimple
+from flappy_bird_gymnasium.envs.flappy_bird_env_simple import FlappyBirdEnvSimple
