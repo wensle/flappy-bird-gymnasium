@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +27,14 @@ random agent.
 """
 
 import time
-import flappy_bird_gym
+
+import gymnasium
+
+import flappy_bird_gymnasium
 
 
 def main():
-    # env = gym.make("flappy_bird_gym:FlappyBird-v0")
-    env = flappy_bird_gym.make("FlappyBird-v0")
+    env = gymnasium.make("FlappyBird-v0")
     score = 0
     obs = env.reset()
     while True:
@@ -44,8 +47,7 @@ def main():
         obs, reward, done, info = env.step(action)
 
         score += reward
-        print(f"Obs: {obs}\n"
-              f"Score: {score}\n")
+        print(f"Obs: {obs}\n" f"Score: {score}\n")
 
         time.sleep(1 / 30)
 

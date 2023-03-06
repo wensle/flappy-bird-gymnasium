@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,13 +28,14 @@ human player.
 
 import time
 
+import gymnasium
 import pygame
-import flappy_bird_gym
+
+import flappy_bird_gymnasium
 
 
 def play():
-    # env = gym.make("flappy_bird_gym:FlappyBird-v0")
-    env = flappy_bird_gym.make("FlappyBird-v0")
+    env = gymnasium.make("FlappyBird-v0")
 
     clock = pygame.time.Clock()
     score = 0
@@ -47,8 +49,9 @@ def play():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if (event.type == pygame.KEYDOWN and
-                    (event.key == pygame.K_SPACE or event.key == pygame.K_UP)):
+            if event.type == pygame.KEYDOWN and (
+                event.key == pygame.K_SPACE or event.key == pygame.K_UP
+            ):
                 action = 1
 
         # Processing:

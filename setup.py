@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,59 +22,56 @@
 # SOFTWARE.
 # ==============================================================================
 
-""" Setup of the flappy-bird-gym package.
+""" Setup of the flappy-bird-gymnasium package.
 """
 
 from typing import List
+
 import setuptools
 
-_VERSION = "0.3.0"
+_VERSION = "0.1.0"
 
 # Short description.
-short_description = "An OpenAI gym environment for the Flappy Bird game."
+short_description = "A Gymnasium environment for the Flappy Bird game."
 
 # Packages needed for the environment to run.
 # The compatible release operator (`~=`) is used to match any candidate version
 # that is expected to be compatible with the specified version.
 REQUIRED_PACKAGES = [
-    "gym ~= 0.18.0",
-    "numpy ~= 1.19.5",
-    "pygame ~= 2.0.1",
+    "gymnasium",
+    "numpy",
+    "pygame",
 ]
 
 # Packages which are only needed for testing code.
-TEST_PACKAGES = [
-
-]  # type: List[str]
+TEST_PACKAGES = []  # type: List[str]
 
 # Loading the "long description" from the projects README file.
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="flappy-bird-gym",
+    name="flappy-bird-gymnasium",
     version=_VERSION,
-    author="Gabriel Guedes Nogueira (Talendar)",
-    author_email="gabriel.gnogueira@gmail.com",
+    author="Martin Kubovcik",
+    author_email="markub3327@gmail.com",
     description=short_description,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Talendar/flappy-bird-gym",
-    download_url="https://github.com/Talendar/flappy-bird-gym/releases",
+    url="https://github.com/markub3327/flappy-bird-gymnasium",
+    download_url="https://github.com/markub3327/flappy-bird-gymnasium/releases",
     # Contained modules and scripts:
     packages=setuptools.find_packages(),
-    package_data={"flappy_bird_gym": ["assets/sprites/*",
-                                      "assets/audio/*"]},
+    package_data={"flappy_bird_gymnasium": ["assets/sprites/*", "assets/audio/*"]},
     install_requires=REQUIRED_PACKAGES,
     tests_require=REQUIRED_PACKAGES + TEST_PACKAGES,
     # PyPI package information:
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
@@ -87,18 +85,19 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     license="MIT License",
-    python_requires=">=3.6",
-    keywords=' '.join([
-        "Flappy-Bird"
-        "Game",
-        "Gym",
-        "OpenAI-Gym",
-        "Reinforcement-Learning",
-        "Reinforcement-Learning-Environment",
-    ]),
+    python_requires=">=3.9",
+    keywords=" ".join(
+        [
+            "Flappy-Bird" "Game",
+            "Gym",
+            "OpenAI-Gym",
+            "Reinforcement-Learning",
+            "Reinforcement-Learning-Environment",
+        ]
+    ),
     entry_points={
-        'console_scripts': [
-            'flappy_bird_gym = flappy_bird_gym.cli:main',
+        "console_scripts": [
+            "flappy_bird_gymnasium = flappy_bird_gymnasium.cli:main",
         ],
     },
 )

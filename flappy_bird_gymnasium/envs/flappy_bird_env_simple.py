@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,24 +21,29 @@
 # SOFTWARE.
 # ==============================================================================
 
-""" Implementation of a Flappy Bird OpenAI Gym environment that yields simple
+""" Implementation of a Flappy Bird OpenAI gymnasium environment that yields simple
 numerical information about the game's state as observations.
 """
 
-from typing import Dict, Tuple, Optional, Union
+from typing import Dict, Optional, Tuple, Union
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
 
-from flappy_bird_gym.envs.game_logic import FlappyBirdLogic
-from flappy_bird_gym.envs.game_logic import PIPE_WIDTH, PIPE_HEIGHT
-from flappy_bird_gym.envs.game_logic import PLAYER_WIDTH, PLAYER_HEIGHT
-from flappy_bird_gym.envs.renderer import FlappyBirdRenderer
+from flappy_bird_gymnasium.envs.game_logic import (
+    PIPE_HEIGHT,
+    PIPE_WIDTH,
+    PLAYER_HEIGHT,
+    PLAYER_MAX_VEL_Y,
+    PLAYER_WIDTH,
+    FlappyBirdLogic,
+)
+from flappy_bird_gymnasium.envs.renderer import FlappyBirdRenderer
 
 
-class FlappyBirdEnvSimple(gym.Env):
-    """ Flappy Bird Gym environment that yields simple observations.
+class FlappyBirdEnvSimple(gymnasium.Env):
+    """Flappy Bird Gymnasium environment that yields simple observations.
 
     The observations yielded by this environment are simple numerical
     information about the game's state. Specifically, the observations are:
@@ -64,19 +70,21 @@ class FlappyBirdEnvSimple(gym.Env):
             be drawn.
     """
 
-    metadata = {'render.modes': ['human']}
+    metadata = {"render.modes": ["human"]}
 
-    def __init__(self,
-                 screen_size: Tuple[int, int] = (288, 512),
-                 normalize_obs: bool = True,
-                 pipe_gap: int = 100,
-                 bird_color: str = "yellow",
-                 pipe_color: str = "green",
-                 background: Optional[str] = "day") -> None:
-        self.action_space = gym.spaces.Discrete(2)
-        self.observation_space = gym.spaces.Box(-np.inf, np.inf,
-                                                shape=(2,),
-                                                dtype=np.float32)
+    def __init__(
+        self,
+        screen_size: Tuple[int, int] = (288, 512),
+        normalize_obs: bool = True,
+        pipe_gap: int = 100,
+        bird_color: str = "yellow",
+        pipe_color: str = "green",
+        background: Optional[str] = "day",
+    ) -> None:
+        self.action_space = gymnasium.spaces.Discrete(2)
+        self.observation_space = gymnasium.spaces.Box(
+            -np.inf, np.inf, shape=(3,), dtype=np.float32
+        )
         self._screen_size = screen_size
         self._normalize_obs = normalize_obs
         self._pipe_gap = pipe_gap
@@ -91,10 +99,12 @@ class FlappyBirdEnvSimple(gym.Env):
     def _get_observation(self):
         up_pipe = low_pipe = None
         h_dist = 0
-        for up_pipe, low_pipe in zip(self._game.upper_pipes,
-                                     self._game.lower_pipes):
-            h_dist = (low_pipe["x"] + PIPE_WIDTH / 2
-                      - (self._game.player_x - PLAYER_WIDTH / 2))
+        for up_pipe, low_pipe in zip(self._game.upper_pipes, self._game.lower_pipes):
+            h_dist = (
+                low_pipe["x"]
+                + PIPE_WIDTH / 2
+                - (self._game.player_x - PLAYER_WIDTH / 2)
+            )
             h_dist += 3  # extra distance to compensate for the buggy hit-box
             if h_dist >= 0:
                 break
@@ -103,22 +113,28 @@ class FlappyBirdEnvSimple(gym.Env):
         lower_pipe_y = low_pipe["y"]
         player_y = self._game.player_y
 
-        v_dist = (upper_pipe_y + lower_pipe_y) / 2 - (player_y
-                                                      + PLAYER_HEIGHT/2)
+        v_dist = (upper_pipe_y + lower_pipe_y) / 2 - (player_y + PLAYER_HEIGHT / 2)
+
+        vel_y = self._game.player_vel_y
 
         if self._normalize_obs:
             h_dist /= self._screen_size[0]
             v_dist /= self._screen_size[1]
+            vel_y /= PLAYER_MAX_VEL_Y
 
-        return np.array([
-            h_dist,
-            v_dist,
-        ])
+        return np.array(
+            [
+                h_dist,
+                v_dist,
+                vel_y,
+            ]
+        )
 
-    def step(self,
-             action: Union[FlappyBirdLogic.Actions, int],
+    def step(
+        self,
+        action: Union[FlappyBirdLogic.Actions, int],
     ) -> Tuple[np.ndarray, float, bool, Dict]:
-        """ Given an action, updates the game state.
+        """Given an action, updates the game state.
 
         Args:
             action (Union[FlappyBirdLogic.Actions, int]): The action taken by
@@ -143,24 +159,28 @@ class FlappyBirdEnvSimple(gym.Env):
         done = not alive
         info = {"score": self._game.score}
 
-        return obs, reward, done, info
+        return obs, reward, done, False, info
 
     def reset(self):
-        """ Resets the environment (starts a new game). """
-        self._game = FlappyBirdLogic(screen_size=self._screen_size,
-                                     pipe_gap_size=self._pipe_gap)
+        """Resets the environment (starts a new game)."""
+        self._game = FlappyBirdLogic(
+            screen_size=self._screen_size, pipe_gap_size=self._pipe_gap
+        )
         if self._renderer is not None:
             self._renderer.game = self._game
+        info = {"score": self._game.score}
 
-        return self._get_observation()
+        return self._get_observation(), info
 
-    def render(self, mode='human') -> None:
-        """ Renders the next frame. """
+    def render(self, mode="human") -> None:
+        """Renders the next frame."""
         if self._renderer is None:
-            self._renderer = FlappyBirdRenderer(screen_size=self._screen_size,
-                                                bird_color=self._bird_color,
-                                                pipe_color=self._pipe_color,
-                                                background=self._bg_type)
+            self._renderer = FlappyBirdRenderer(
+                screen_size=self._screen_size,
+                bird_color=self._bird_color,
+                pipe_color=self._pipe_color,
+                background=self._bg_type,
+            )
             self._renderer.game = self._game
             self._renderer.make_display()
 
@@ -168,7 +188,7 @@ class FlappyBirdEnvSimple(gym.Env):
         self._renderer.update_display()
 
     def close(self):
-        """ Closes the environment. """
+        """Closes the environment."""
         if self._renderer is not None:
             pygame.display.quit()
             self._renderer = None

@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,5 +24,5 @@
 """ Exposes the environment class.
 """
 
-from flappy_bird_gym.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
-from flappy_bird_gym.envs.flappy_bird_env_simple import FlappyBirdEnvSimple
+from flappy_bird_gymnasium.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
+from flappy_bird_gymnasium.envs.flappy_bird_env_simple import FlappyBirdEnvSimple

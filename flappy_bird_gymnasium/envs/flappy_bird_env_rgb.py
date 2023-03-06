@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +25,18 @@
 RBG-arrays representing the game's screen as observations.
 """
 
-from typing import Dict, Tuple, Optional, Union
+from typing import Dict, Optional, Tuple, Union
 
-import gym
+import gymnasium
 import numpy as np
 import pygame
 
-from flappy_bird_gym.envs.game_logic import FlappyBirdLogic
-from flappy_bird_gym.envs.renderer import FlappyBirdRenderer
+from flappy_bird_gymnasium.envs.game_logic import FlappyBirdLogic
+from flappy_bird_gymnasium.envs.renderer import FlappyBirdRenderer
 
 
-class FlappyBirdEnvRGB(gym.Env):
-    """  Flappy Bird Gym environment that yields images as observations.
+class FlappyBirdEnvRGB(gymnasium.Env):
+    """Flappy Bird Gymnasium environment that yields images as observations.
 
     The observations yielded by this environment are RGB-arrays (images)
     representing the game's screen.
@@ -58,41 +59,46 @@ class FlappyBirdEnvRGB(gym.Env):
 
     metadata = {"render.modes": ["human", "rgb_array"]}
 
-    def __init__(self,
-                 screen_size: Tuple[int, int] = (288, 512),
-                 pipe_gap: int = 100,
-                 bird_color: str = "yellow",
-                 pipe_color: str = "green",
-                 background: Optional[str] = None) -> None:
-        self.action_space = gym.spaces.Discrete(2)
-        self.observation_space = gym.spaces.Box(0, 255, [*screen_size, 3])
+    def __init__(
+        self,
+        screen_size: Tuple[int, int] = (288, 512),
+        pipe_gap: int = 100,
+        bird_color: str = "yellow",
+        pipe_color: str = "green",
+        background: Optional[str] = None,
+    ) -> None:
+        self.action_space = gymnasium.spaces.Discrete(2)
+        self.observation_space = gymnasium.spaces.Box(0, 255, [*screen_size, 3])
 
         self._screen_size = screen_size
         self._pipe_gap = pipe_gap
 
         self._game = None
-        self._renderer = FlappyBirdRenderer(screen_size=self._screen_size,
-                                            bird_color=bird_color,
-                                            pipe_color=pipe_color,
-                                            background=background)
+        self._renderer = FlappyBirdRenderer(
+            screen_size=self._screen_size,
+            bird_color=bird_color,
+            pipe_color=pipe_color,
+            background=background,
+        )
 
     def _get_observation(self):
         self._renderer.draw_surface(show_score=False)
         return pygame.surfarray.array3d(self._renderer.surface)
 
     def reset(self):
-        """ Resets the environment (starts a new game).
-        """
-        self._game = FlappyBirdLogic(screen_size=self._screen_size,
-                                     pipe_gap_size=self._pipe_gap)
+        """Resets the environment (starts a new game)."""
+        self._game = FlappyBirdLogic(
+            screen_size=self._screen_size, pipe_gap_size=self._pipe_gap
+        )
 
         self._renderer.game = self._game
         return self._get_observation()
 
-    def step(self,
-             action: Union[FlappyBirdLogic.Actions, int],
+    def step(
+        self,
+        action: Union[FlappyBirdLogic.Actions, int],
     ) -> Tuple[np.ndarray, float, bool, Dict]:
-        """ Given an action, updates the game state.
+        """Given an action, updates the game state.
 
         Args:
             action (Union[FlappyBirdLogic.Actions, int]): The action taken by
@@ -118,7 +124,7 @@ class FlappyBirdEnvRGB(gym.Env):
         return obs, reward, done, info
 
     def render(self, mode="human") -> Optional[np.ndarray]:
-        """ Renders the environment.
+        """Renders the environment.
 
         If ``mode`` is:
 
@@ -148,7 +154,7 @@ class FlappyBirdEnvRGB(gym.Env):
             self._renderer.update_display()
 
     def close(self):
-        """ Closes the environment. """
+        """Closes the environment."""
         if self._renderer is not None:
             pygame.display.quit()
             self._renderer = None

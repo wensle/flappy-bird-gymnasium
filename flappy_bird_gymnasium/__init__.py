@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,39 +22,36 @@
 # SOFTWARE.
 # ==============================================================================
 
-""" Registers the gym environments and exports the `gym.make` function.
+""" Registers the gymnasium environments and exports the `gymnasium.make` function.
 """
 
 # Silencing pygame:
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
-# Exporting envs:
-from flappy_bird_gym.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
-from flappy_bird_gym.envs.flappy_bird_env_simple import FlappyBirdEnvSimple
-
-# Exporting original game:
-from flappy_bird_gym import original_game
-
-# Exporting gym.make:
-from gym import make
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 # Registering environments:
-from gym.envs.registration import register
+from gymnasium.envs.registration import register
+
+# Exporting original game:
+from flappy_bird_gymnasium import original_game
+
+# Exporting envs:
+from flappy_bird_gymnasium.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
+from flappy_bird_gymnasium.envs.flappy_bird_env_simple import FlappyBirdEnvSimple
 
 register(
     id="FlappyBird-v0",
-    entry_point="flappy_bird_gym:FlappyBirdEnvSimple",
+    entry_point="flappy_bird_gymnasium:FlappyBirdEnvSimple",
 )
 
 register(
     id="FlappyBird-rgb-v0",
-    entry_point="flappy_bird_gym:FlappyBirdEnvRGB",
+    entry_point="flappy_bird_gymnasium:FlappyBirdEnvRGB",
 )
 
 # Main names:
 __all__ = [
-    make.__name__,
     FlappyBirdEnvRGB.__name__,
     FlappyBirdEnvSimple.__name__,
 ]

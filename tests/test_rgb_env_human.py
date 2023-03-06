@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +28,12 @@ human player.
 
 import time
 
-import flappy_bird_gym
+import gymnasium
 import numpy as np
 import pygame
 from PIL import Image
+
+import flappy_bird_gymnasium
 
 
 def play_with_render(env):
@@ -46,8 +49,9 @@ def play_with_render(env):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if (event.type == pygame.KEYDOWN and
-                    (event.key == pygame.K_SPACE or event.key == pygame.K_UP)):
+            if event.type == pygame.KEYDOWN and (
+                event.key == pygame.K_SPACE or event.key == pygame.K_UP
+            ):
                 action = 1
 
         # Processing:
@@ -69,8 +73,9 @@ def play_with_obs(env, greyscale: bool):
     obs = env.reset()
 
     # noinspection PyProtectedMember
-    display = pygame.display.set_mode((env._renderer._screen_width,
-                                       env._renderer._screen_height))
+    display = pygame.display.set_mode(
+        (env._renderer._screen_width, env._renderer._screen_height)
+    )
     clock = pygame.time.Clock()
     score = 0
 
@@ -88,8 +93,9 @@ def play_with_obs(env, greyscale: bool):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if (event.type == pygame.KEYDOWN and
-                    (event.key == pygame.K_SPACE or event.key == pygame.K_UP)):
+            if event.type == pygame.KEYDOWN and (
+                event.key == pygame.K_SPACE or event.key == pygame.K_UP
+            ):
                 action = 1
 
         # Processing:
@@ -121,7 +127,7 @@ def visualize_obs(env, greyscale: bool):
 
 
 if __name__ == "__main__":
-    flappy_env = flappy_bird_gym.make("FlappyBird-rgb-v0")
+    flappy_env = gymnasium.make("FlappyBird-rgb-v0")
 
     print(f"Action space: {flappy_env.action_space}")
     print(f"Observation space: {flappy_env.observation_space}")

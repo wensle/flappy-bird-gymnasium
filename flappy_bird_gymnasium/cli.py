@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,19 +28,22 @@
 import argparse
 import time
 
-import flappy_bird_gym
+import gymnasium
+
+import flappy_bird_gymnasium
 
 
 def _get_args():
-    """ Parses the command line arguments and returns them. """
+    """Parses the command line arguments and returns them."""
     parser = argparse.ArgumentParser(description=__doc__)
 
     # Argument for the mode of execution (human or random):
     parser.add_argument(
-        "--mode", "-m",
+        "--mode",
+        "-m",
         type=str,
         default="human",
-        choices=["human", 'random'],
+        choices=["human", "random"],
         help="The execution mode for the game.",
     )
 
@@ -47,7 +51,7 @@ def _get_args():
 
 
 def random_agent_env():
-    env = flappy_bird_gym.make("FlappyBird-v0")
+    env = gymnasium.make("FlappyBird-v0")
     env.reset()
     score = 0
     while True:
@@ -60,9 +64,7 @@ def random_agent_env():
         obs, reward, done, _ = env.step(action)
 
         score += reward
-        print(f"Obs: {obs}\n"
-              f"Action: {action}\n"
-              f"Score: {score}\n")
+        print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")
 
         time.sleep(1 / 30)
 
@@ -76,7 +78,7 @@ def main():
     args = _get_args()
 
     if args.mode == "human":
-        flappy_bird_gym.original_game.main()
+        flappy_bird_gymnasium.original_game.main()
     elif args.mode == "random":
         random_agent_env()
     else:

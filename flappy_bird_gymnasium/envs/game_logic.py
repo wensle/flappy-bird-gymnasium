@@ -1,6 +1,7 @@
 # MIT License
 #
 # Copyright (c) 2020 Gabriel Nogueira (Talendar)
+# Copyright (c) 2023 Martin Kubovcik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -42,10 +43,10 @@ PIPE_VEL_X = -4
 PLAYER_MAX_VEL_Y = 10  # max vel along Y, max descend speed
 PLAYER_MIN_VEL_Y = -8  # min vel along Y, max ascend speed
 
-PLAYER_ACC_Y = 1       # players downward acceleration
-PLAYER_VEL_ROT = 3     # angular speed
+PLAYER_ACC_Y = 1  # players downward acceleration
+PLAYER_VEL_ROT = 3  # angular speed
 
-PLAYER_FLAP_ACC = -9   # players speed on flapping
+PLAYER_FLAP_ACC = -9  # players speed on flapping
 ################################################################################
 
 
@@ -65,7 +66,7 @@ BACKGROUND_HEIGHT = 512
 
 
 class FlappyBirdLogic:
-    """ Handles the logic of the Flappy Bird game.
+    """Handles the logic of the Flappy Bird game.
 
     The implementation of this class is decoupled from the implementation of the
     game's graphics. This class implements the logical portion of the game.
@@ -95,9 +96,7 @@ class FlappyBirdLogic:
         player_idx (int): Current index of the bird's animation cycle.
     """
 
-    def __init__(self,
-                 screen_size: Tuple[int, int],
-                 pipe_gap_size: int = 100) -> None:
+    def __init__(self, screen_size: Tuple[int, int], pipe_gap_size: int = 100) -> None:
         self._screen_width = screen_size[0]
         self._screen_height = screen_size[1]
 
@@ -117,18 +116,20 @@ class FlappyBirdLogic:
 
         # List of upper pipes:
         self.upper_pipes = [
-            {"x": self._screen_width + 200,
-             "y": new_pipe1[0]["y"]},
-            {"x": self._screen_width + 200 + (self._screen_width / 2),
-             "y": new_pipe2[0]["y"]},
+            {"x": self._screen_width + 200, "y": new_pipe1[0]["y"]},
+            {
+                "x": self._screen_width + 200 + (self._screen_width / 2),
+                "y": new_pipe2[0]["y"],
+            },
         ]
 
         # List of lower pipes:
         self.lower_pipes = [
-            {"x": self._screen_width + 200,
-             "y": new_pipe1[1]["y"]},
-            {"x": self._screen_width + 200 + (self._screen_width / 2),
-             "y": new_pipe2[1]["y"]},
+            {"x": self._screen_width + 200, "y": new_pipe1[1]["y"]},
+            {
+                "x": self._screen_width + 200 + (self._screen_width / 2),
+                "y": new_pipe2[1]["y"],
+            },
         ]
 
         # Player's info:
@@ -144,38 +145,40 @@ class FlappyBirdLogic:
         self._loop_iter = 0
 
     class Actions(IntEnum):
-        """ Possible actions for the player to take. """
+        """Possible actions for the player to take."""
+
         IDLE, FLAP = 0, 1
 
     def _get_random_pipe(self) -> Dict[str, int]:
-        """ Returns a randomly generated pipe. """
+        """Returns a randomly generated pipe."""
         # y of gap between upper and lower pipe
-        gap_y = random.randrange(0,
-                                 int(self.base_y * 0.6 - self._pipe_gap_size))
+        gap_y = random.randrange(0, int(self.base_y * 0.6 - self._pipe_gap_size))
         gap_y += int(self.base_y * 0.2)
 
         pipe_x = self._screen_width + 10
         return [
-            {"x": pipe_x, "y": gap_y - PIPE_HEIGHT},          # upper pipe
+            {"x": pipe_x, "y": gap_y - PIPE_HEIGHT},  # upper pipe
             {"x": pipe_x, "y": gap_y + self._pipe_gap_size},  # lower pipe
         ]
 
     def check_crash(self) -> bool:
-        """ Returns True if player collides with the ground (base) or a pipe.
-        """
+        """Returns True if player collides with the ground (base) or a pipe."""
         # if player crashes into ground
         if self.player_y + PLAYER_HEIGHT >= self.base_y - 1:
             return True
         else:
-            player_rect = pygame.Rect(self.player_x, self.player_y,
-                                      PLAYER_WIDTH, PLAYER_HEIGHT)
+            player_rect = pygame.Rect(
+                self.player_x, self.player_y, PLAYER_WIDTH, PLAYER_HEIGHT
+            )
 
             for up_pipe, low_pipe in zip(self.upper_pipes, self.lower_pipes):
                 # upper and lower pipe rects
-                up_pipe_rect = pygame.Rect(up_pipe['x'], up_pipe['y'],
-                                           PIPE_WIDTH, PIPE_HEIGHT)
-                low_pipe_rect = pygame.Rect(low_pipe['x'], low_pipe['y'],
-                                            PIPE_WIDTH, PIPE_HEIGHT)
+                up_pipe_rect = pygame.Rect(
+                    up_pipe["x"], up_pipe["y"], PIPE_WIDTH, PIPE_HEIGHT
+                )
+                low_pipe_rect = pygame.Rect(
+                    low_pipe["x"], low_pipe["y"], PIPE_WIDTH, PIPE_HEIGHT
+                )
 
                 # check collision
                 up_collide = player_rect.colliderect(up_pipe_rect)
@@ -187,7 +190,7 @@ class FlappyBirdLogic:
         return False
 
     def update_state(self, action: Union[Actions, int]) -> bool:
-        """ Given an action taken by the player, updates the game's state.
+        """Given an action taken by the player, updates the game's state.
 
         Args:
             action (Union[FlappyBirdLogic.Actions, int]): The action taken by
@@ -211,7 +214,7 @@ class FlappyBirdLogic:
         # check for score
         player_mid_pos = self.player_x + PLAYER_WIDTH / 2
         for pipe in self.upper_pipes:
-            pipe_mid_pos = pipe['x'] + PIPE_WIDTH / 2
+            pipe_mid_pos = pipe["x"] + PIPE_WIDTH / 2
             if pipe_mid_pos <= player_mid_pos < pipe_mid_pos + 4:
                 self.score += 1
                 self.sound_cache = "point"
@@ -238,23 +241,23 @@ class FlappyBirdLogic:
             # (calculated in visible rotation)
             self.player_rot = 45
 
-        self.player_y += min(self.player_vel_y,
-                             self.base_y - self.player_y - PLAYER_HEIGHT)
+        self.player_y += min(
+            self.player_vel_y, self.base_y - self.player_y - PLAYER_HEIGHT
+        )
 
         # move pipes to left
         for up_pipe, low_pipe in zip(self.upper_pipes, self.lower_pipes):
-            up_pipe['x'] += PIPE_VEL_X
-            low_pipe['x'] += PIPE_VEL_X
+            up_pipe["x"] += PIPE_VEL_X
+            low_pipe["x"] += PIPE_VEL_X
 
         # add new pipe when first pipe is about to touch left of screen
-        if len(self.upper_pipes) > 0 and 0 < self.upper_pipes[0]['x'] < 5:
+        if len(self.upper_pipes) > 0 and 0 < self.upper_pipes[0]["x"] < 5:
             new_pipe = self._get_random_pipe()
             self.upper_pipes.append(new_pipe[0])
             self.lower_pipes.append(new_pipe[1])
 
         # remove first pipe if its out of the screen
-        if (len(self.upper_pipes) > 0 and
-                self.upper_pipes[0]['x'] < -PIPE_WIDTH):
+        if len(self.upper_pipes) > 0 and self.upper_pipes[0]["x"] < -PIPE_WIDTH:
             self.upper_pipes.pop(0)
             self.lower_pipes.pop(0)
 
