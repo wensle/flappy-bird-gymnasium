@@ -116,17 +116,20 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         v_dist = (upper_pipe_y + lower_pipe_y) / 2 - (player_y + PLAYER_HEIGHT / 2)
 
         vel_y = self._game.player_vel_y
+        rot = self._game.player_rot
 
         if self._normalize_obs:
             h_dist /= self._screen_size[0]
             v_dist /= self._screen_size[1]
             vel_y /= PLAYER_MAX_VEL_Y
+            rot /= 90
 
         return np.array(
             [
-                h_dist,
-                v_dist,
-                vel_y,
+                h_dist,  # horizontal distance to the next pipe
+                v_dist,  # vertical distance to the next pipe
+                vel_y,   # player's vertical velocity
+                rot,     # player's rotation
             ]
         )
 
