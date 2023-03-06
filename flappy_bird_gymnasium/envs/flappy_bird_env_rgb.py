@@ -73,7 +73,7 @@ class FlappyBirdEnvRGB(gymnasium.Env):
 
         self._screen_size = screen_size
         self._pipe_gap = pipe_gap
-        
+
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
 
