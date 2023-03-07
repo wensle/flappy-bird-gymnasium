@@ -60,7 +60,7 @@ while True:
     action = env.action_space.sample()
 
     # Processing:
-    obs, reward, done, _, info = env.step(action)
+    obs, reward, terminated, _, info = env.step(action)
     
     # Rendering the game:
     # (remove this two lines during training)
@@ -68,7 +68,7 @@ while True:
     time.sleep(1 / 30)  # FPS
     
     # Checking if the player is still alive
-    if done:
+    if terminated:
         break
 
 env.close()
