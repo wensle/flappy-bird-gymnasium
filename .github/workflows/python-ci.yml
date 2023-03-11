@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python3 -m pip install black isort flake8
+          python3 -m pip install black isort flake8 pytest
      
       - name: Check codestyle
         run: |
@@ -37,3 +37,7 @@ jobs:
       - name: Check imports
         run: |
           isort --check-only ./
+
+      - name: Run pytest
+        run: |
+          pytest
