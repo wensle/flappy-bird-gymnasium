@@ -89,8 +89,8 @@ setuptools.setup(
     keywords=" ".join(
         [
             "Flappy-Bird" "Game",
-            "Gym",
-            "OpenAI-Gym",
+            "Gymnasium",
+            "Farama-Foundation",
             "Reinforcement-Learning",
             "Reinforcement-Learning-Environment",
         ]
