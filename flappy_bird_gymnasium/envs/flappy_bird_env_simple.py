@@ -106,13 +106,15 @@ class FlappyBirdEnvSimple(gymnasium.Env):
                 player_y = self._game.player_y
                 v_dist = ((upper_pipe_y + lower_pipe_y) / 2) - player_y
                 pipes.append((h_dist, v_dist))
-        
+
         pipes = sorted(pipes, key=lambda x: x[0])
         vel_y = self._game.player_vel_y
         rot = self._game.player_rot
 
         if self._normalize_obs:
-            pipes = [(h / self._screen_size[0], v / self._screen_size[1]) for h, v in pipes]
+            pipes = [
+                (h / self._screen_size[0], v / self._screen_size[1]) for h, v in pipes
+            ]
             vel_y /= PLAYER_MAX_VEL_Y
             rot /= 90
 
