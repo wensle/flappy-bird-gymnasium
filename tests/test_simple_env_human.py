@@ -60,7 +60,6 @@ def play():
         score += reward
         print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")
 
-
         clock.tick(15)
 
         if done:
