@@ -17,6 +17,8 @@ observations. The yielded attributes are the:
 
 * horizontal distance to the next pipe
 * difference between the player's y position and the next hole's y position
+* horizontal distance to the next next pipe
+* difference between the player's y position and the next next hole's y position
 * player's vertical velocity
 * player's rotation
 

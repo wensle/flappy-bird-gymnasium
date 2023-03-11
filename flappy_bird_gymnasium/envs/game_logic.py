@@ -110,9 +110,10 @@ class FlappyBirdLogic:
         self.score = 0
         self._pipe_gap_size = pipe_gap_size
 
-        # Generate 2 new pipes to add to upper_pipes and lower_pipes lists
+        # Generate 3 new pipes to add to upper_pipes and lower_pipes lists
         new_pipe1 = self._get_random_pipe()
         new_pipe2 = self._get_random_pipe()
+        new_pipe3 = self._get_random_pipe()
 
         # List of upper pipes:
         self.upper_pipes = [
@@ -120,6 +121,10 @@ class FlappyBirdLogic:
             {
                 "x": self._screen_width + 200 + (self._screen_width / 2),
                 "y": new_pipe2[0]["y"],
+            },
+            {
+                "x": self._screen_width + 200 + self._screen_width,
+                "y": new_pipe3[0]["y"],
             },
         ]
 
@@ -129,6 +134,10 @@ class FlappyBirdLogic:
             {
                 "x": self._screen_width + 200 + (self._screen_width / 2),
                 "y": new_pipe2[1]["y"],
+            },
+            {
+                "x": self._screen_width + 200 + self._screen_width,
+                "y": new_pipe3[1]["y"],
             },
         ]
 
@@ -155,7 +164,7 @@ class FlappyBirdLogic:
         gap_y = random.randrange(0, int(self.base_y * 0.6 - self._pipe_gap_size))
         gap_y += int(self.base_y * 0.2)
 
-        pipe_x = self._screen_width + 10
+        pipe_x = self._screen_width + PIPE_WIDTH + (self._screen_width * 0.2)
         return [
             {"x": pipe_x, "y": gap_y - PIPE_HEIGHT},  # upper pipe
             {"x": pipe_x, "y": gap_y + self._pipe_gap_size},  # lower pipe
@@ -254,15 +263,12 @@ class FlappyBirdLogic:
             up_pipe["x"] += PIPE_VEL_X
             low_pipe["x"] += PIPE_VEL_X
 
-        # add new pipe when first pipe is about to touch left of screen
-        if len(self.upper_pipes) > 0 and 0 < self.upper_pipes[0]["x"] < 5:
-            new_pipe = self._get_random_pipe()
-            self.upper_pipes.append(new_pipe[0])
-            self.lower_pipes.append(new_pipe[1])
-
-        # remove first pipe if its out of the screen
-        if len(self.upper_pipes) > 0 and self.upper_pipes[0]["x"] < -PIPE_WIDTH:
-            self.upper_pipes.pop(0)
-            self.lower_pipes.pop(0)
+            # it is out of the screen
+            if up_pipe["x"] < -PIPE_WIDTH:
+                new_up_pipe, new_low_pipe = self._get_random_pipe()
+                up_pipe["x"] = new_up_pipe["x"]
+                up_pipe["y"] = new_up_pipe["y"]
+                low_pipe["x"] = new_low_pipe["x"]
+                low_pipe["y"] = new_low_pipe["y"]
 
         return reward, True

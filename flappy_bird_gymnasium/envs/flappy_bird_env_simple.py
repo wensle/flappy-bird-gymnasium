@@ -97,37 +97,31 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         self._bg_type = background
 
     def _get_observation(self):
-        up_pipe = low_pipe = None
-        h_dist = 0
+        pipes = []
         for up_pipe, low_pipe in zip(self._game.upper_pipes, self._game.lower_pipes):
-            h_dist = (
-                low_pipe["x"]
-                + PIPE_WIDTH / 2
-                - (self._game.player_x - PLAYER_WIDTH / 2)
-            )
-            h_dist += 3  # extra distance to compensate for the buggy hit-box
-            if h_dist >= 0:
-                break
-
-        upper_pipe_y = up_pipe["y"] + PIPE_HEIGHT
-        lower_pipe_y = low_pipe["y"]
-        player_y = self._game.player_y
-
-        v_dist = (upper_pipe_y + lower_pipe_y) / 2 - (player_y + PLAYER_HEIGHT / 2)
-
+            if low_pipe["x"] > self._game.player_x:
+                h_dist = low_pipe["x"] - self._game.player_x
+                upper_pipe_y = up_pipe["y"] + PIPE_HEIGHT
+                lower_pipe_y = low_pipe["y"]
+                player_y = self._game.player_y
+                v_dist = ((upper_pipe_y + lower_pipe_y) / 2) - player_y
+                pipes.append((h_dist, v_dist))
+        
+        pipes = sorted(pipes, key=lambda x: x[0])
         vel_y = self._game.player_vel_y
         rot = self._game.player_rot
 
         if self._normalize_obs:
-            h_dist /= self._screen_size[0]
-            v_dist /= self._screen_size[1]
+            pipes = [(h / self._screen_size[0], v / self._screen_size[1]) for h, v in pipes]
             vel_y /= PLAYER_MAX_VEL_Y
             rot /= 90
 
         return np.array(
             [
-                h_dist,  # horizontal distance to the next pipe
-                v_dist,  # vertical distance to the next pipe
+                pipes[0][0],  # horizontal distance to the next pipe
+                pipes[0][1],  # vertical distance to the next pipe
+                pipes[1][0],  # horizontal distance to the next next pipe
+                pipes[1][1],  # vertical distance to the next next pipe
                 vel_y,  # player's vertical velocity
                 rot,  # player's rotation
             ]
