@@ -24,12 +24,16 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python3 -m pip install black isort
+          python3 -m pip install black isort flake8
      
       - name: Check codestyle
         run: |
           black --check ./
-      
+
+      - name: Check codestyle
+        run: |
+          flake8 ./
+
       - name: Check imports
         run: |
           isort --check-only ./
