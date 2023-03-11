@@ -24,11 +24,8 @@
 
 """ Registers the gymnasium environments and exports the `gymnasium.make` function.
 """
-
 # Silencing pygame:
 import os
-
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 # Registering environments:
 from gymnasium.envs.registration import register
@@ -36,6 +33,8 @@ from gymnasium.envs.registration import register
 # Exporting envs:
 from flappy_bird_gymnasium.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
 from flappy_bird_gymnasium.envs.flappy_bird_env_simple import FlappyBirdEnvSimple
+
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 register(
     id="FlappyBird-v0",

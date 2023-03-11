@@ -27,9 +27,9 @@
 
 import argparse
 import time
-import pygame
 
 import gymnasium
+import pygame
 
 import flappy_bird_gymnasium
 
@@ -49,6 +49,7 @@ def _get_args():
     )
 
     return parser.parse_args()
+
 
 def human_agent_env():
     env = gymnasium.make("FlappyBird-v0")
@@ -84,6 +85,7 @@ def human_agent_env():
             break
 
     env.close()
+
 
 def random_agent_env():
     env = gymnasium.make("FlappyBird-v0")
