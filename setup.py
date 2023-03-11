@@ -44,7 +44,7 @@ REQUIRED_PACKAGES = [
 ]
 
 # Packages which are only needed for testing code.
-TEST_PACKAGES = []  # type: List[str]
+TEST_PACKAGES = ["black", "isort", "flake8", "pytest"]  # type: List[str]
 
 # Loading the "long description" from the projects README file.
 with open("README.md", "r", encoding="utf-8") as fh:
