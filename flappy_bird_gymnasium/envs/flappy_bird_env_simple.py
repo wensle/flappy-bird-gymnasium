@@ -83,7 +83,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     ) -> None:
         self.action_space = gymnasium.spaces.Discrete(2)
         self.observation_space = gymnasium.spaces.Box(
-            -np.inf, np.inf, shape=(4,), dtype=np.float64
+            -np.inf, np.inf, shape=(9,), dtype=np.float64
         )
         self._screen_size = screen_size
         self._normalize_obs = normalize_obs
@@ -99,31 +99,42 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     def _get_observation(self):
         pipes = []
         for up_pipe, low_pipe in zip(self._game.upper_pipes, self._game.lower_pipes):
-            if low_pipe["x"] > self._game.player_x:
-                h_dist = low_pipe["x"] - self._game.player_x
+            h_dist = (low_pipe["x"] + (PIPE_WIDTH / 2)) - (
+                self._game.player_x - (PLAYER_WIDTH / 2)
+            )
+            h_dist += 3  # extra distance to compensate for the buggy hit-box
+            if h_dist >= 0:
                 upper_pipe_y = up_pipe["y"] + PIPE_HEIGHT
                 lower_pipe_y = low_pipe["y"]
-                player_y = self._game.player_y
-                v_dist = ((upper_pipe_y + lower_pipe_y) / 2) - player_y
-                pipes.append((h_dist, v_dist))
+                pipes.append((h_dist, upper_pipe_y, lower_pipe_y))
 
         pipes = sorted(pipes, key=lambda x: x[0])
+        pos_y = self._game.player_y
         vel_y = self._game.player_vel_y
         rot = self._game.player_rot
 
         if self._normalize_obs:
             pipes = [
-                (h / self._screen_size[0], v / self._screen_size[1]) for h, v in pipes
+                (
+                    h / self._screen_size[0],
+                    v1 / self._screen_size[1],
+                    v2 / self._screen_size[1],
+                )
+                for h, v1, v2 in pipes
             ]
+            pos_y = pos_y / self._screen_size[1]
             vel_y /= PLAYER_MAX_VEL_Y
             rot /= 90
 
         return np.array(
             [
                 pipes[0][0],  # horizontal distance to the next pipe
-                pipes[0][1],  # vertical distance to the next pipe
+                pipes[0][1],  # the next pipe's top vertical position
+                pipes[0][2],  # the next pipe's bottom vertical position
                 pipes[1][0],  # horizontal distance to the next next pipe
-                pipes[1][1],  # vertical distance to the next next pipe
+                pipes[1][1],  # the next next pipe's top vertical position
+                pipes[1][2],  # the next next pipe's bottom vertical position
+                pos_y,  # player's vertical position
                 vel_y,  # player's vertical velocity
                 rot,  # player's rotation
             ]
