@@ -27,6 +27,7 @@
 
 import argparse
 import time
+import pygame
 
 import gymnasium
 
@@ -49,6 +50,40 @@ def _get_args():
 
     return parser.parse_args()
 
+def human_agent_env():
+    env = gymnasium.make("FlappyBird-v0")
+
+    clock = pygame.time.Clock()
+    score = 0
+
+    obs = env.reset()
+    while True:
+        env.render()
+
+        # Getting action:
+        action = 0
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN and (
+                event.key == pygame.K_SPACE or event.key == pygame.K_UP
+            ):
+                action = 1
+
+        # Processing:
+        obs, reward, done, _, info = env.step(action)
+
+        score += reward
+        print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")
+
+        clock.tick(15)
+
+        if done:
+            env.render()
+            time.sleep(0.6)
+            break
+
+    env.close()
 
 def random_agent_env():
     env = gymnasium.make("FlappyBird-v0")
@@ -78,7 +113,7 @@ def main():
     args = _get_args()
 
     if args.mode == "human":
-        flappy_bird_gymnasium.original_game.main()
+        human_agent_env()
     elif args.mode == "random":
         random_agent_env()
     else:

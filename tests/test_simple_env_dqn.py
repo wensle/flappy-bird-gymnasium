@@ -77,9 +77,7 @@ for epoch in range(100):
 
         state = np.expand_dims(next_state, axis=0)
         score += reward
-        print(f"Obs: {state}")
-        print(f"Action: {action}")
-        print(f"Score: {score}\n")
+        print(f"Obs: {state}\n" f"Action: {action}\n" f"Score: {score}\n")
 
         clock.tick(30)
 

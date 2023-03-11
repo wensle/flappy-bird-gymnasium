@@ -58,8 +58,8 @@ def play():
         obs, reward, done, _, info = env.step(action)
 
         score += reward
-        print(f"Obs: {obs}")
-        print(f"Score: {score}\n")
+        print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")
+
 
         clock.tick(15)
 

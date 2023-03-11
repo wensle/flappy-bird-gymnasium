@@ -103,10 +103,9 @@ class FlappyBirdEnvSimple(gymnasium.Env):
                 self._game.player_x - (PLAYER_WIDTH / 2)
             )
             h_dist += 3  # extra distance to compensate for the buggy hit-box
+            # if the bird see previous pipe, it should not be considered
             if h_dist >= 0:
-                upper_pipe_y = up_pipe["y"] + PIPE_HEIGHT
-                lower_pipe_y = low_pipe["y"]
-                pipes.append((h_dist, upper_pipe_y, lower_pipe_y))
+                pipes.append((h_dist, (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"]))
 
         pipes = sorted(pipes, key=lambda x: x[0])
         pos_y = self._game.player_y

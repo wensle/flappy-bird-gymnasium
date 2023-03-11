@@ -33,9 +33,6 @@ os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 # Registering environments:
 from gymnasium.envs.registration import register
 
-# Exporting original game:
-from flappy_bird_gymnasium import original_game
-
 # Exporting envs:
 from flappy_bird_gymnasium.envs.flappy_bird_env_rgb import FlappyBirdEnvRGB
 from flappy_bird_gymnasium.envs.flappy_bird_env_simple import FlappyBirdEnvSimple
