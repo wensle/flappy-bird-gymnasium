@@ -34,12 +34,13 @@ import numpy as np
 import flappy_bird_gymnasium
 
 
-def play(audio_on=True):
+def play(audio_on=True, render=True):
     env = gymnasium.make("FlappyBird-v0", audio_on=audio_on)
     score = 0
     obs = env.reset()
     while True:
-        env.render()
+        if render:
+            env.render()
 
         # Getting random action:
         action = env.action_space.sample()
@@ -50,11 +51,13 @@ def play(audio_on=True):
         score += reward
         print(f"Obs: {obs}\n" f"Score: {score}\n")
 
-        time.sleep(1 / 30)
+        if render:
+            time.sleep(1 / 30)
 
         if done:
-            env.render()
-            time.sleep(0.5)
+            if render:
+                env.render()
+                time.sleep(0.5)
             break
 
     env.close()
@@ -64,7 +67,7 @@ def play(audio_on=True):
 
 
 def test_play():
-    play(audio_on=False)
+    play(audio_on=False, render=False)
 
 
 if __name__ == "__main__":
