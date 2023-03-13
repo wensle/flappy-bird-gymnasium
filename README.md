@@ -1,4 +1,4 @@
-## Flappy Bird for Gymnasium
+# Flappy Bird for Gymnasium
 
 ![Python versions](https://img.shields.io/pypi/pyversions/flappy-bird-gymnasium)
 [![PyPI](https://img.shields.io/pypi/v/flappy-bird-gymnasium)](https://pypi.org/project/flappy-bird-gymnasium/)
@@ -9,12 +9,14 @@ the Flappy Bird game. The implementation of the game's logic and graphics was
 based on the [flappy-bird-gym](https://github.com/Talendar/flappy-bird-gym) project, by
 [@Talendar](https://github.com/Talendar). 
 
-The two environments differ only on the type of observations they yield for the
-agents. The "FlappyBird-rgb-v0" environment, yields RGB-arrays (images)
+## State space
+
+The "FlappyBird-rgb-v0" environment, yields RGB-arrays (images)
 representing the game's screen. The "FlappyBird-v0" environment, on the other
 hand, yields simple numerical information about the game's state as
-observations. The yielded attributes are the:
+observations.
 
+### `FlappyBird-v0`
 * horizontal distance to the next pipe
 * the next top pipe's vertical position
 * the next bottom pipe's vertical position
@@ -24,6 +26,20 @@ observations. The yielded attributes are the:
 * player's vertical position
 * player's vertical velocity
 * player's rotation
+
+### `FlappyBird-rgb-v0`
+The RGB image of size 288, 512 pixels. The pixel values are from range [0, 255]. The image does not contain score of bird.
+
+## Action space
+
+* 0 - means **do nothing**
+* 1 - means **flap**
+
+## Rewards
+
+* +0.1 - alive
+* +1.0 - pipe
+* -1.0 - dead
 
 <br>
 
