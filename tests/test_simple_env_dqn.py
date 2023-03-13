@@ -97,6 +97,7 @@ def play(epoch=10, audio_on=True, render=True):
     assert info["score"] > 0
     assert score > 10.999999999999977
 
+
 def test_play():
     play(epoch=1, audio_on=False, render=False)
 
