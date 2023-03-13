@@ -34,7 +34,7 @@ import numpy as np
 import flappy_bird_gymnasium
 
 
-def play():
+def test_play():
     env = gymnasium.make("FlappyBird-v0")
     score = 0
     obs = env.reset()
@@ -64,4 +64,4 @@ def play():
 
 
 if __name__ == "__main__":
-    play()
+    test_play()
