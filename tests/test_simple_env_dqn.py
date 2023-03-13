@@ -6,6 +6,7 @@ import pygame
 import tensorflow as tf
 
 import flappy_bird_gymnasium
+from flappy_bird_gymnasium.envs.utils import MODEL_PATH
 
 
 class DuelingDQN(tf.keras.Model):
@@ -53,7 +54,7 @@ def play():
     # init models
     q_model = DuelingDQN(env.action_space.n)
     q_model.build((None, env.observation_space.shape[0]))
-    q_model.load_weights("model.h5")
+    q_model.load_weights(MODEL_PATH + "/model.h5")
 
     # run
     for epoch in range(100):

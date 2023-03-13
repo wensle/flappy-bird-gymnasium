@@ -62,8 +62,10 @@ def play(audio_on=True):
     assert info["score"] == 0
     np.testing.assert_allclose(score, 8.99999999999998)
 
+
 def test_play():
     play(audio_on=False)
+
 
 if __name__ == "__main__":
     play()

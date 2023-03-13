@@ -43,6 +43,7 @@ _BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
 SPRITES_PATH = str(_BASE_DIR / "assets/sprites")
 AUDIO_PATH = str(_BASE_DIR / "assets/audio")
+MODEL_PATH = str(_BASE_DIR / "tests")
 
 
 def pixel_collision(
