@@ -128,11 +128,11 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         return np.array(
             [
                 pipes[0][0],  # horizontal distance to the next pipe
-                pipes[0][1],  # the next pipe's top vertical position
-                pipes[0][2],  # the next pipe's bottom vertical position
+                pipes[0][1],  # the next top pipe's vertical position
+                pipes[0][2],  # the next bottom pipe's vertical position
                 pipes[1][0],  # horizontal distance to the next next pipe
-                pipes[1][1],  # the next next pipe's top vertical position
-                pipes[1][2],  # the next next pipe's bottom vertical position
+                pipes[1][1],  # the next next top pipe's vertical position
+                pipes[1][2],  # the next next bottom pipe's vertical position
                 pos_y,  # player's vertical position
                 vel_y,  # player's vertical velocity
                 rot,  # player's rotation
