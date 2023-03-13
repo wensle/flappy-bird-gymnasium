@@ -37,9 +37,9 @@ The RGB image of size 288, 512 pixels. The pixel values are from range [0, 255].
 
 ## Rewards
 
-* +0.1 - **alive**
-* +1.0 - **pipe**
-* -1.0 - **dead**
+* +0.1 - **every frame it stays alive**
+* +1.0 - **successfully passing a pipe**
+* -1.0 - **dying**
 
 <br>
 
