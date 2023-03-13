@@ -7,8 +7,6 @@ import tensorflow as tf
 
 import flappy_bird_gymnasium
 
-env = gymnasium.make("FlappyBird-v0")
-
 
 class DuelingDQN(tf.keras.Model):
     def __init__(self, action_space):
@@ -49,41 +47,48 @@ class DuelingDQN(tf.keras.Model):
         return tf.math.argmax(q_value, axis=-1)[0]
 
 
-# init models
-q_model = DuelingDQN(env.action_space.n)
-q_model.build((None, env.observation_space.shape[0]))
-q_model.load_weights("model.h5")
+def play():
+    env = gymnasium.make("FlappyBird-v0")
 
-# run
-for epoch in range(100):
-    clock = pygame.time.Clock()
-    score = 0
+    # init models
+    q_model = DuelingDQN(env.action_space.n)
+    q_model.build((None, env.observation_space.shape[0]))
+    q_model.load_weights("model.h5")
 
-    state, _ = env.reset()
-    state = np.expand_dims(state, axis=0)
-    while True:
-        env.render()
+    # run
+    for epoch in range(100):
+        clock = pygame.time.Clock()
+        score = 0
 
-        # Getting action
-        action = q_model.get_action(state)
-        action = np.array(action, copy=False, dtype=env.env.action_space.dtype)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
-        # Processing action
-        next_state, reward, done, _, info = env.step(action)
-
-        state = np.expand_dims(next_state, axis=0)
-        score += reward
-        print(f"Obs: {state}\n" f"Action: {action}\n" f"Score: {score}\n")
-
-        clock.tick(30)
-
-        if done:
+        state, _ = env.reset()
+        state = np.expand_dims(state, axis=0)
+        while True:
             env.render()
-            time.sleep(0.6)
-            break
 
-env.close()
+            # Getting action
+            action = q_model.get_action(state)
+            action = np.array(action, copy=False, dtype=env.env.action_space.dtype)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+
+            # Processing action
+            next_state, reward, done, _, info = env.step(action)
+
+            state = np.expand_dims(next_state, axis=0)
+            score += reward
+            print(f"Obs: {state}\n" f"Action: {action}\n" f"Score: {score}\n")
+
+            clock.tick(30)
+
+            if done:
+                env.render()
+                time.sleep(0.6)
+                break
+
+    env.close()
+
+
+if __name__ == "__main__":
+    play()

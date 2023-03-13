@@ -105,3 +105,7 @@ To play the game (human mode), run the following command:
 To see a random agent playing, add an argument to the command:
 
     $ flappy_bird_gymnasium --mode random
+
+To see a Deep Q Network agent playing, add an argument to the command:
+
+    $ flappy_bird_gymnasium --mode dqn

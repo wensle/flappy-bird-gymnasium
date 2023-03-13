@@ -41,4 +41,4 @@ jobs:
 
       - name: Run pytest
         run: |
-          pytest tests/test_CI.py
+          pytest tests/test_simple_env_random.py

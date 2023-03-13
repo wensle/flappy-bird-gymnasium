@@ -62,7 +62,9 @@ setuptools.setup(
     download_url="https://github.com/markub3327/flappy-bird-gymnasium/releases",
     # Contained modules and scripts:
     packages=setuptools.find_packages(),
-    package_data={"flappy_bird_gymnasium": ["assets/sprites/*", "assets/audio/*"]},
+    package_data={
+        "flappy_bird_gymnasium": ["assets/sprites/*", "assets/audio/*", "tests/*"]
+    },
     install_requires=REQUIRED_PACKAGES,
     tests_require=REQUIRED_PACKAGES + TEST_PACKAGES,
     # PyPI package information:

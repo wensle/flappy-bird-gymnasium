@@ -29,11 +29,12 @@ random agent.
 import time
 
 import gymnasium
+import numpy as np
 
 import flappy_bird_gymnasium
 
 
-def main():
+def play():
     env = gymnasium.make("FlappyBird-v0")
     score = 0
     obs = env.reset()
@@ -57,7 +58,10 @@ def main():
             break
 
     env.close()
+    assert obs.shape == (9,)
+    assert info["score"] == 0
+    np.testing.assert_allclose(score, 8.99999999999998)
 
 
 if __name__ == "__main__":
-    main()
+    play()

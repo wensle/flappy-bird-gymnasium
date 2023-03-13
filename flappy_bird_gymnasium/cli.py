@@ -32,6 +32,9 @@ import gymnasium
 import pygame
 
 import flappy_bird_gymnasium
+from tests.test_simple_env_dqn import play as dqn_agent_env
+from tests.test_simple_env_human import play as human_agent_env
+from tests.test_simple_env_random import play as random_agent_env
 
 
 def _get_args():
@@ -44,71 +47,11 @@ def _get_args():
         "-m",
         type=str,
         default="human",
-        choices=["human", "random"],
+        choices=["human", "random", "dqn"],
         help="The execution mode for the game.",
     )
 
     return parser.parse_args()
-
-
-def human_agent_env():
-    env = gymnasium.make("FlappyBird-v0")
-
-    clock = pygame.time.Clock()
-    score = 0
-
-    obs = env.reset()
-    while True:
-        env.render()
-
-        # Getting action:
-        action = 0
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.KEYDOWN and (
-                event.key == pygame.K_SPACE or event.key == pygame.K_UP
-            ):
-                action = 1
-
-        # Processing:
-        obs, reward, done, _, info = env.step(action)
-
-        score += reward
-        print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")
-
-        clock.tick(15)
-
-        if done:
-            env.render()
-            time.sleep(0.6)
-            break
-
-    env.close()
-
-
-def random_agent_env():
-    env = gymnasium.make("FlappyBird-v0")
-    env.reset()
-    score = 0
-    while True:
-        env.render()
-
-        # Getting random action:
-        action = env.action_space.sample()
-
-        # Processing:
-        obs, reward, done, _, _ = env.step(action)
-
-        score += reward
-        print(f"Obs: {obs}\n" f"Action: {action}\n" f"Score: {score}\n")
-
-        time.sleep(1 / 30)
-
-        if done:
-            env.render()
-            time.sleep(0.5)
-            break
 
 
 def main():
@@ -118,5 +61,7 @@ def main():
         human_agent_env()
     elif args.mode == "random":
         random_agent_env()
+    elif args.mode == "dqn":
+        dqn_agent_env()
     else:
         print("Invalid mode!")
