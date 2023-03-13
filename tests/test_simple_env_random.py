@@ -34,8 +34,8 @@ import numpy as np
 import flappy_bird_gymnasium
 
 
-def test_play():
-    env = gymnasium.make("FlappyBird-v0")
+def play(audio_on=True):
+    env = gymnasium.make("FlappyBird-v0", audio_on=audio_on)
     score = 0
     obs = env.reset()
     while True:
@@ -62,6 +62,8 @@ def test_play():
     assert info["score"] == 0
     np.testing.assert_allclose(score, 8.99999999999998)
 
+def test_play():
+    play(audio_on=False)
 
 if __name__ == "__main__":
-    test_play()
+    play()

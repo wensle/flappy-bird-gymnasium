@@ -75,6 +75,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     def __init__(
         self,
         screen_size: Tuple[int, int] = (288, 512),
+        audio_on: bool = True,
         normalize_obs: bool = True,
         pipe_gap: int = 100,
         bird_color: str = "yellow",
@@ -88,6 +89,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         self._screen_size = screen_size
         self._normalize_obs = normalize_obs
         self._pipe_gap = pipe_gap
+        self._audio_on = audio_on
 
         self._game = None
         self._renderer = None
@@ -185,6 +187,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         if self._renderer is None:
             self._renderer = FlappyBirdRenderer(
                 screen_size=self._screen_size,
+                audio_on=self._audio_on,
                 bird_color=self._bird_color,
                 pipe_color=self._pipe_color,
                 background=self._bg_type,
