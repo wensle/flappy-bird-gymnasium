@@ -84,7 +84,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     ) -> None:
         self.action_space = gymnasium.spaces.Discrete(2)
         self.observation_space = gymnasium.spaces.Box(
-            -np.inf, np.inf, shape=(9,), dtype=np.float64
+            -np.inf, np.inf, shape=(12,), dtype=np.float64
         )
         self._screen_size = screen_size
         self._normalize_obs = normalize_obs
@@ -101,13 +101,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     def _get_observation(self):
         pipes = []
         for up_pipe, low_pipe in zip(self._game.upper_pipes, self._game.lower_pipes):
-            h_dist = (low_pipe["x"] + (PIPE_WIDTH / 2)) - (
-                self._game.player_x - (PLAYER_WIDTH / 2)
-            )
-            h_dist += 3  # extra distance to compensate for the buggy hit-box
-            # if the bird see previous pipe, it should not be considered
-            if h_dist >= 0:
-                pipes.append((h_dist, (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"]))
+            pipes.append((low_pipe["x"], (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"]))
 
         pipes = sorted(pipes, key=lambda x: x[0])
         pos_y = self._game.player_y
@@ -129,12 +123,15 @@ class FlappyBirdEnvSimple(gymnasium.Env):
 
         return np.array(
             [
-                pipes[0][0],  # horizontal distance to the next pipe
-                pipes[0][1],  # the next top pipe's vertical position
-                pipes[0][2],  # the next bottom pipe's vertical position
-                pipes[1][0],  # horizontal distance to the next next pipe
-                pipes[1][1],  # the next next top pipe's vertical position
-                pipes[1][2],  # the next next bottom pipe's vertical position
+                pipes[0][0],  # the last pipe's horizontal position
+                pipes[0][1],  # the last top pipe's vertical position
+                pipes[0][2],  # the last bottom pipe's vertical position
+                pipes[1][0],  # the next pipe's horizontal position
+                pipes[1][1],  # the next top pipe's vertical position
+                pipes[1][2],  # the next bottom pipe's vertical position
+                pipes[2][0],  # the next next pipe's horizontal position
+                pipes[2][1],  # the next next top pipe's vertical position
+                pipes[2][2],  # the next next bottom pipe's vertical position
                 pos_y,  # player's vertical position
                 vel_y,  # player's vertical velocity
                 rot,  # player's rotation
