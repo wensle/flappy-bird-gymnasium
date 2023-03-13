@@ -16,11 +16,11 @@ hand, yields simple numerical information about the game's state as
 observations. The yielded attributes are the:
 
 * horizontal distance to the next pipe
-* the next pipe's top vertical position
-* the next pipe's bottom vertical position
+* the next top pipe's vertical position
+* the next bottom pipe's vertical position
 * horizontal distance to the next next pipe
-* the next next pipe's top vertical position
-* the next next pipe's bottom vertical position
+* the next next top pipe's vertical position
+* the next next bottom pipe's vertical position
 * player's vertical position
 * player's vertical velocity
 * player's rotation
