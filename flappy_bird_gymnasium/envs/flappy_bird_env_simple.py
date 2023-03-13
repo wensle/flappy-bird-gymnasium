@@ -101,7 +101,12 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     def _get_observation(self):
         pipes = []
         for up_pipe, low_pipe in zip(self._game.upper_pipes, self._game.lower_pipes):
-            pipes.append((low_pipe["x"], (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"]))
+            # max messured distence is sreen width
+            if low_pipe["x"] > self._screen_size[0]:
+                x = self._screen_size[0]
+            else:
+                x = low_pipe["x"]
+            pipes.append((x, (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"]))
 
         pipes = sorted(pipes, key=lambda x: x[0])
         pos_y = self._game.player_y
