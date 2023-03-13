@@ -30,6 +30,7 @@ import time
 
 import gymnasium
 import numpy as np
+import pygame
 
 import flappy_bird_gymnasium
 
@@ -44,6 +45,11 @@ def play(audio_on=True, render=True):
 
         # Getting random action:
         action = env.action_space.sample()
+
+        if render:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
         # Processing:
         obs, reward, done, _, info = env.step(action)

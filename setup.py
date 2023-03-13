@@ -63,7 +63,11 @@ setuptools.setup(
     # Contained modules and scripts:
     packages=setuptools.find_packages(),
     package_data={
-        "flappy_bird_gymnasium": ["assets/sprites/*", "assets/audio/*", "tests/*"]
+        "flappy_bird_gymnasium": [
+            "assets/sprites/*",
+            "assets/audio/*",
+            "assets/model/*",
+        ]
     },
     install_requires=REQUIRED_PACKAGES,
     tests_require=REQUIRED_PACKAGES + TEST_PACKAGES,
