@@ -67,7 +67,7 @@ def play(audio_on=True, render=True):
             break
 
     env.close()
-    assert obs.shape == (9,)
+    assert obs.shape == (12,)
     assert info["score"] == 0
     np.testing.assert_allclose(score, 8.99999999999998)
 

@@ -101,8 +101,13 @@ class FlappyBirdEnvSimple(gymnasium.Env):
     def _get_observation(self):
         pipes = []
         for up_pipe, low_pipe in zip(self._game.upper_pipes, self._game.lower_pipes):
-            # the bird see behind the screen !!!
-            pipes.append((low_pipe["x"], (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"]))
+            # the pipe is behind the screen?
+            if low_pipe["x"] > self._screen_size[0]:
+                pipes.append((self._screen_size[0], 0, self._screen_size[1]))
+            else:
+                pipes.append(
+                    (low_pipe["x"], (up_pipe["y"] + PIPE_HEIGHT), low_pipe["y"])
+                )
 
         pipes = sorted(pipes, key=lambda x: x[0])
         pos_y = self._game.player_y
