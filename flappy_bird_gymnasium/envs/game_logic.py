@@ -30,7 +30,7 @@ released under the MIT license.
 """
 
 
-import random
+from gymnasium.utils import seeding
 from enum import IntEnum
 from itertools import cycle
 from typing import Dict, Tuple, Union
@@ -96,7 +96,9 @@ class FlappyBirdLogic:
         player_idx (int): Current index of the bird's animation cycle.
     """
 
-    def __init__(self, screen_size: Tuple[int, int], pipe_gap_size: int = 100) -> None:
+    def __init__(
+        self, np_random, screen_size: Tuple[int, int], pipe_gap_size: int = 100
+    ) -> None:
         self._screen_width = screen_size[0]
         self._screen_height = screen_size[1]
 
@@ -109,6 +111,8 @@ class FlappyBirdLogic:
 
         self.score = 0
         self._pipe_gap_size = pipe_gap_size
+
+        self._np_random = np_random
 
         # Generate 3 new pipes to add to upper_pipes and lower_pipes lists
         new_pipe1 = self._get_random_pipe()
@@ -161,7 +165,9 @@ class FlappyBirdLogic:
     def _get_random_pipe(self) -> Dict[str, int]:
         """Returns a randomly generated pipe."""
         # y of gap between upper and lower pipe
-        gap_y = random.randrange(0, int(self.base_y * 0.6 - self._pipe_gap_size))
+        gap_y = self._np_random.integers(
+            0, int(self.base_y * 0.6 - self._pipe_gap_size)
+        )
         gap_y += int(self.base_y * 0.2)
 
         pipe_x = self._screen_width + PIPE_WIDTH + (self._screen_width * 0.2)
