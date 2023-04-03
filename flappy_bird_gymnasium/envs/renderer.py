@@ -185,3 +185,6 @@ class FlappyBirdRenderer:
         if self.audio_on and self.game.sound_cache is not None:
             sound_name = self.game.sound_cache
             self.sounds[sound_name].play()
+
+    def set_color(self, color):
+        self.images["player"][self.game.player_idx].fill(color)

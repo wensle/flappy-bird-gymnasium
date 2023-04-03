@@ -59,6 +59,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/markub3327/flappy-bird-gymnasium",
+    project_urls={
+        "Bug Tracker": "https://github.com/markub3327/flappy-bird-gymnasium/issues",
+    },
     download_url="https://github.com/markub3327/flappy-bird-gymnasium/releases",
     # Contained modules and scripts:
     packages=setuptools.find_packages(),
