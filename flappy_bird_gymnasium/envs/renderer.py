@@ -68,6 +68,7 @@ class FlappyBirdRenderer:
         self._screen_width = screen_size[0]
         self._screen_height = screen_size[1]
 
+        self._color = None
         self.display = None
         self.surface = pygame.Surface(screen_size)
         self.images = utils.load_images(
@@ -161,6 +162,9 @@ class FlappyBirdRenderer:
             visible_rot,
         )
 
+        if self._color is not None:
+            player_surface.fill(self._color, special_flags=pygame.BLEND_RGBA_ADD)
+
         self.surface.blit(player_surface, (self.game.player_x, self.game.player_y))
 
     def update_display(self) -> None:
@@ -187,4 +191,4 @@ class FlappyBirdRenderer:
             self.sounds[sound_name].play()
 
     def set_color(self, color):
-        self.images["player"][self.game.player_idx].fill(color)
+        self._color = color
