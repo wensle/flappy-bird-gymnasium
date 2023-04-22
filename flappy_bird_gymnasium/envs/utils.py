@@ -34,6 +34,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import pygame
 from pygame import Rect
 from pygame import image as pyg_image
 from pygame import mixer as pyg_mixer
