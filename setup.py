@@ -64,7 +64,7 @@ setuptools.setup(
     },
     download_url="https://github.com/markub3327/flappy-bird-gymnasium/releases",
     # Contained modules and scripts:
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(include=['*', 'tests']),
     package_data={
         "flappy_bird_gymnasium": [
             "assets/sprites/*",
