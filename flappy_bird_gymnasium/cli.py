@@ -32,7 +32,6 @@ import gymnasium
 import pygame
 
 import flappy_bird_gymnasium
-from tests.test_simple_env_dqn import play as dqn_agent_env
 from tests.test_simple_env_human import play as human_agent_env
 from tests.test_simple_env_random import play as random_agent_env
 
@@ -47,7 +46,7 @@ def _get_args():
         "-m",
         type=str,
         default="human",
-        choices=["human", "random", "dqn"],
+        choices=["human", "random"],
         help="The execution mode for the game.",
     )
 
@@ -61,7 +60,5 @@ def main():
         human_agent_env()
     elif args.mode == "random":
         random_agent_env()
-    elif args.mode == "dqn":
-        dqn_agent_env()
     else:
         print("Invalid mode!")
