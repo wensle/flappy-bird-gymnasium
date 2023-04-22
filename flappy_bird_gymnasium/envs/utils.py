@@ -137,8 +137,13 @@ def load_images(
 
 def load_sounds() -> Dict[str, pyg_mixer.Sound]:
     """Loads and returns the audio assets of the game."""
-    pyg_mixer.init()
     sounds = {}
+
+    try:
+        pyg_mixer.init()
+    except pygame.error:
+        print("Warning: Audio not initialized. Running without sound.")
+        return sounds  # Return an empty dictionary since the mixer is not initialized
 
     if "win" in sys.platform:
         soundExt = ".wav"
