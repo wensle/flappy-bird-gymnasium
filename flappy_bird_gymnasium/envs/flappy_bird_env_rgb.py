@@ -96,7 +96,9 @@ class FlappyBirdEnvRGB(gymnasium.Env):
         super().reset(seed=seed)
 
         self._game = FlappyBirdLogic(
-            screen_size=self._screen_size, pipe_gap_size=self._pipe_gap
+            np_random=self.np_random,
+            screen_size=self._screen_size,
+            pipe_gap_size=self._pipe_gap,
         )
 
         self.renderer.game = self._game
