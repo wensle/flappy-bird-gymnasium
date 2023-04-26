@@ -30,7 +30,6 @@ released under the MIT license.
 """
 
 
-from gymnasium.utils import seeding
 from enum import IntEnum
 from itertools import cycle
 from typing import Dict, Tuple, Union

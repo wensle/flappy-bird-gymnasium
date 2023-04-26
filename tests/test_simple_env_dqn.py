@@ -61,7 +61,7 @@ def play(epoch=10, audio_on=True, render=True):
         clock = pygame.time.Clock()
         score = 0
 
-        state, _ = env.reset()
+        state, _ = env.reset(seed=123)
         state = np.expand_dims(state, axis=0)
         while True:
             if render:
