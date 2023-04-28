@@ -38,7 +38,7 @@ import flappy_bird_gymnasium
 def play(audio_on=True, render=True):
     env = gymnasium.make("FlappyBird-v0", audio_on=audio_on)
     score = 0
-    obs = env.reset()
+    obs = env.reset(seed=123)
     while True:
         if render:
             env.render()

@@ -48,15 +48,7 @@ The RGB image of size 288, 512 pixels. The pixel values are from range [0, 255].
 
 <p align="center">
   <img align="center" 
-       src="https://github.com/markub3327/flappy-bird-gymnasium/blob/main/imgs/yellow_bird_playing.gif?raw=true" 
-       width="200"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img align="center" 
-       src="https://github.com/markub3327/flappy-bird-gymnasium/blob/main/imgs/red_bird_start_screen.gif?raw=true" 
-       width="200"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img align="center" 
-       src="https://github.com/markub3327/flappy-bird-gymnasium/blob/main/imgs/blue_bird_playing.gif?raw=true" 
+       src="https://github.com/markub3327/flappy-bird-gymnasium/blob/main/imgs/dqn.gif?raw=true" 
        width="200"/>
 </p>
 
