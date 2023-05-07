@@ -62,3 +62,7 @@ def main():
         random_agent_env()
     else:
         print("Invalid mode!")
+
+
+if __name__ == "__main__":
+    main()
