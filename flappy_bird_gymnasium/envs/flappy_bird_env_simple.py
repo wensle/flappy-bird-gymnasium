@@ -70,7 +70,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
             be drawn.
     """
 
-    metadata = {"render_modes": ["human"], "render_fps": 30}
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 30}
 
     def __init__(
         self,
@@ -81,6 +81,7 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         bird_color: str = "yellow",
         pipe_color: str = "green",
         background: Optional[str] = "day",
+        render_mode: Optional[str] = None,
     ) -> None:
         self.action_space = gymnasium.spaces.Discrete(2)
         self.observation_space = gymnasium.spaces.Box(
@@ -92,11 +93,18 @@ class FlappyBirdEnvSimple(gymnasium.Env):
         self._audio_on = audio_on
 
         self._game = None
-        self._renderer = None
+        self.renderer = FlappyBirdRenderer(
+            screen_size=self._screen_size,
+            audio_on=audio_on,
+            bird_color=bird_color,
+            pipe_color=pipe_color,
+            background=background,
+        )
 
         self._bird_color = bird_color
         self._pipe_color = pipe_color
         self._bg_type = background
+        self.render_mode = render_mode
 
     def _get_observation(self):
         pipes = []
@@ -181,36 +189,41 @@ class FlappyBirdEnvSimple(gymnasium.Env):
             screen_size=self._screen_size,
             pipe_gap_size=self._pipe_gap,
         )
-        if self._renderer is not None:
-            self._renderer.game = self._game
+        if self.renderer is not None:
+            self.renderer.game = self._game
 
         info = {"score": self._game.score}
         return self._get_observation(), info
 
     def set_color(self, color):
-        if self._renderer is not None:
-            self._renderer.set_color(color)
+        if self.renderer is not None:
+            self.renderer.set_color(color)
 
     def render(self) -> None:
         """Renders the next frame."""
-        if self._renderer is None:
-            self._renderer = FlappyBirdRenderer(
-                screen_size=self._screen_size,
-                audio_on=self._audio_on,
-                bird_color=self._bird_color,
-                pipe_color=self._pipe_color,
-                background=self._bg_type,
+        if self.render_mode is None:
+            assert self.spec is not None
+            gymnasium.logger.warn(
+                "You are calling render method without specifying any render mode. "
+                "You can specify the render_mode at initialization, "
+                f'e.g. gym.make("{self.spec.id}", render_mode="rgb_array")'
             )
-            self._renderer.game = self._game
-            self._renderer.make_display()
+            return
+        self.renderer.draw_surface(show_score=True)
+        if self.render_mode == "rgb_array":
+            return np.transpose(
+                np.array(pygame.surfarray.pixels3d(self.renderer.surface)),
+                axes=(1, 0, 2),
+            )
+        else:
+            if self.renderer.display is None:
+                self.renderer.make_display()
 
-        self._renderer.draw_surface(show_score=True)
-        self._renderer.update_display()
+            self.renderer.update_display()
 
     def close(self):
         """Closes the environment."""
-        if self._renderer is not None:
+        if self.renderer is not None:
             pygame.display.quit()
             pygame.quit()
-            self._renderer = None
         super().close()
